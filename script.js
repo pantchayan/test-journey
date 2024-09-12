@@ -1327,7 +1327,7 @@ let changeViewEventListener = () => {
 document.querySelector('.change-view').addEventListener('click', () => {
   setTimeout(() => {
     changeViewEventListener();
-  }, 900)
+  }, 0)
 })
 
 let CURRENT_MODE = 'Day';
