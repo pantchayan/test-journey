@@ -1283,7 +1283,7 @@ let renewControls = () => {
   controls.minZoom = 1;
 }
 let cameraPos = { x: 0, y: 26, z: 100 }
-document.querySelector('.change-view').addEventListener('click', () => {
+let changeViewEventListener = () => {
   cameraData.type = 'Orthographic'
   camera = orthographicCamera;
   camera.position.set(0, 26, 100);
@@ -1323,6 +1323,11 @@ document.querySelector('.change-view').addEventListener('click', () => {
   cloudModelArr[0].position.y -= 1;
   cloudModelArr[1].position.y -= 4;
   cloudModelArr[2].position.y -= 2;
+}
+document.querySelector('.change-view').addEventListener('click', () => {
+  setTimeout(() => {
+    changeViewEventListener();
+  }, 900)
 })
 
 let CURRENT_MODE = 'Day';
