@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaner Journey</title>
+    <link rel="stylesheet" href="./styles/button.css">
+    <link rel="stylesheet" href="./styles/progressBar.css">
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+
+    .webgl {
+        position: absolute;
+        top: 0;
+
+    }
+
+    body {
+        height: 100vh;
+        width: 100vw;
+        background: rgb(0, 31, 36);
+        background-color: rgb(18 157 211);
+        /* background: linear-gradient(180deg, rgba(2, 4, 42, 1) 0%, rgba(9, 70, 121, 1) 20%, rgba(0, 212, 255, 1) 46%); */
+        overflow: hidden;
+        margin: 0;
+    }
+
+    .change-view,
+    .next-view,
+    .prev-view,
+    .toggle-mode {
+        /* display: none; */
+        position: absolute;
+        bottom: 20px;
+        right: 0;
+    }
+
+    .next-view,
+    .prev-view {
+        display: none;
+        width: fit-content;
+    }
+
+    .prev-view {
+        left: 0;
+    }
+
+    .toggle-mode {
+        left: 45%;
+        width: fit-content;
+    }
+</style>
+
+<body>
+    <div class="progress-bar-container">
+        <label for="progress-bar" class="progress-bar">Started loading...</label>
+        <progress id="progress-bar" value="0"></progress>
+        <br>
+        <p> Interact and understand learner's journery. </p>
+    </div>
+    <canvas class="webgl"></canvas>
+    <audio id="crashAudio" style="display:none">
+        <source src="./assets/audio/crash.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="levelChangeAudio" style="display:none">
+        <source src="./assets/audio/level-change.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="PointAudio" style="display:none">
+        <source src="./assets/audio/point-audio.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="BombAudio" style="display:none">
+        <source src="./assets/audio/bomb-audio.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="ItemUpAudio" style="display:none">
+        <source src="./assets/audio/item-up.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="ItemDownAudio" style="display:none">
+        <source src="./assets/audio/item-down.mp3" type="audio/mpeg">
+    </audio>
+    <video id="video" loop crossOrigin="anonymous" playsinline style="display:none">
+        <source src="./assets/video/compressed-portfolio-vid.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+    </video>
+    <button class="change-view">ENTER INTERACTION</button>
+    <button class="toggle-mode">NIGHT MODE</button>
+    <button class="next-view">NEXT ISLAND</button>
+    <button class="prev-view">PREV ISLAND</button>
+    <!-- Three.js v0.161.0 (r161) -->
+    <script type="importmap">
+        {
+          "imports": {
+            "three": "https://unpkg.com/three@0.166.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.166.0/examples/jsm/"
+          }
+        }
+    </script>
+    <!-- GSAP -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <!-- Cannon.js -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.js"
+        integrity="sha512-+E0UhA8ib3H5AlREMX1I0mc3R7HMkQYH+hkkfW47aLGMnVJwod+jJ2jxe94xYyUdqPs9AFDHUxKnJzScEP5cmA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    <script src="cannon.js"></script>
+    <script src="script.js" type="module"></script>
+    <script>javascript: (function () { var script = document.createElement('script'); script.onload = function () { var stats = new Stats(); document.body.appendChild(stats.dom); requestAnimationFrame(function loop() { stats.update(); requestAnimationFrame(loop) }); }; script.src = 'https://mrdoob.github.io/stats.js/build/stats.min.js'; document.head.appendChild(script); })()</script>
+</body>
+
+</html>

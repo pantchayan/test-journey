@@ -1,0 +1,24 @@
+button {
+    background: linear-gradient(145deg, #63b7ff, #07568f); /* Soft blue gradient */
+    border: none;
+    border-radius: 10px; /* Rounded corners */
+    padding: 10px 20px; /* Size */
+    color: white; /* Text color */
+    font-size: 16px; /* Text size */
+    font-weight: 700;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Soft shadow */
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  button:hover {
+    transform: scale(1.05); /* Slightly enlarges on hover */
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3); /* Deeper shadow on hover */
+  }
+  
+  button:active {
+    transform: scale(0.98); /* Shrinks slightly when clicked */
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Softer shadow */
+  }
+  
