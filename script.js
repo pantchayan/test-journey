@@ -54,9 +54,6 @@ loadingManager.onLoad = function () {
   progressText.innerText = 'Constructing Experience...';
   setTimeout(() => {
     progressContainer.style.display = 'none';
-    setTimeout(() => {
-      document.querySelector('.model-credit').style.display = 'none';
-    }, 2000);
   }, 50);
 };
 
@@ -1959,6 +1956,26 @@ const pastelColorsArr = [
 ];
 let module8Animation = (stage) => {
   if (stage === "build") {
+    let numOfBalls = 80;
+    function detectMob() {
+      const toMatch = [
+        /Android/i,
+        /webOS/i,
+        /iPhone/i,
+        /iPad/i,
+        /iPod/i,
+        /BlackBerry/i,
+        /Windows Phone/i
+      ];
+
+      return toMatch.some((toMatchItem) => {
+        return navigator.userAgent.match(toMatchItem);
+      });
+    }
+
+    if (detectMob()) {
+      numOfBalls = 10;
+    }
     module8Group = new THREE.Group();
     let boxGroup = new THREE.Group();
     let boxHeight = 7;
@@ -2096,14 +2113,14 @@ let module8Animation = (stage) => {
 
     setTimeout(() => {
       bunnySampler = samplerFromModel(bunnyModel);
-      bunnyPoints = makeSamplePoints(bunnySampler, 80);
+      bunnyPoints = makeSamplePoints(bunnySampler, numOfBalls);
       // bunnyMesh.scale.set(0.03, 0.03, 0.03);
       // bunnyMesh.rotation.x = Math.PI / 2;
       bunnyGroup.add(bunnyPoints);
 
       let createBunnyPoints = () => {
         bunnySampler = samplerFromModel(bunnyModel);
-        bunnyPoints = makeSamplePoints(bunnySampler, 80);
+        bunnyPoints = makeSamplePoints(bunnySampler, numOfBalls);
         bunnyGroup.add(bunnyPoints);
         bunnyPointsArr.push(bunnyPoints);
         animCount++;
