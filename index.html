@@ -356,6 +356,7 @@
             gsap.set(svg, { y: 500 + delayTime, height: "70%" });
             svg.style.zIndex = z++;
             console.log(svg.style.zIndex)
+            svg.style.display = 'none'
             delayTime += 450
             // delayTime += 0.015; // Adjust the delay for each successive SVG
         });
@@ -364,6 +365,7 @@
             delayTime = 300;
             // gsap.set(svg, { y: 500 + delayTime, height: "70%" });
             svgArr.forEach((svg, index) => {
+                svg.style.display = 'block'
                 // Set initial position to just below the screen (assuming y = 500px is off-screen)
 
                 // delayTime += 0.015; // Adjust the delay for each successive SVG
@@ -371,7 +373,8 @@
                 gsap.to(svg, {
                     y: "-100vh",
                     duration: 1.8,
-                    ease: 'power2.out', // Smooth in and out ease for swipe effect
+                    ease: 'power2.out',
+                    onComplete: () => {svg.style.display = 'none'} // Smooth in and out ease for swipe effect
                 });
     
             });
