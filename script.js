@@ -2171,9 +2171,9 @@ let module8Animation = (stage) => {
 
     bunnyGroup.position.set(0.413, 7.05, 6.84)
     bunnyGroup.rotation.x = -Math.PI / 2;
-    gui.add(bunnyGroup.position, 'x').min(-10).max(10).step(0.001);
-    gui.add(bunnyGroup.position, 'y').min(-10).max(10).step(0.001);
-    gui.add(bunnyGroup.position, 'z').min(-10).max(10).step(0.001);
+    // gui.add(bunnyGroup.position, 'x').min(-10).max(10).step(0.001);
+    // gui.add(bunnyGroup.position, 'y').min(-10).max(10).step(0.001);
+    // gui.add(bunnyGroup.position, 'z').min(-10).max(10).step(0.001);
     module8Group.add(bunnyGroup);
 
     let sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
@@ -2390,12 +2390,12 @@ let module9Animation = (stage) => {
     const textMaterial = new THREE.MeshBasicMaterial({ color: new THREE.Color('white') });
     textMesh = new THREE.Mesh(textGeometry, textMaterial);
 
-    textMesh.position.set(0.35, 10, 3.85)
+    textMesh.position.set(0.0, 10, 3.85)
     // textMesh.position.set(-3.52, 8, -2)
 
-    gui.add(textMesh.position, 'x').min(-10).max(10).step(0.01);
-    gui.add(textMesh.position, 'y').min(-10).max(10).step(0.01);
-    gui.add(textMesh.position, 'z').min(-10).max(10).step(0.01);
+    // gui.add(textMesh.position, 'x').min(-10).max(10).step(0.01);
+    // gui.add(textMesh.position, 'y').min(-10).max(10).step(0.01);
+    // gui.add(textMesh.position, 'z').min(-10).max(10).step(0.01);
 
     module9Group.add(textMesh)
 
@@ -2508,7 +2508,7 @@ let module9Animation = (stage) => {
               highestScore = currScore;
             }
             textMesh.geometry = createText(`Highest Score: ${currScore}`)
-            gsap.to(textMesh.position, { x: 0.35, y: 10, z: 3.85, duration: 0.6 })
+            gsap.to(textMesh.position, { x: 0.0, y: 10, z: 3.85, duration: 0.6 })
             canvas.removeEventListener('click', gameBtnClickListener, true);
             canvas.addEventListener('click', gameMenuBtnClickListener, true);
             gameFlag = false;
