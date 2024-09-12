@@ -593,7 +593,7 @@ renderer.gammaOutput = true;
 renderer.gammaFactor = 3;
 renderer.toneMapping = THREE['LinearToneMapping'];
 renderer.toneMappingExposure = 1.13;
-
+renderer.setPixelRatio(window.devicePixelRatio);
 renderer.render(scene, camera);
 
 let rendererFolder = gui.addFolder('Renderer');
