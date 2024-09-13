@@ -1,39 +1,183 @@
-button {
-    background: linear-gradient(145deg, #05559b, #058ae9); /* Soft blue gradient */
-    border: none;
-    border-radius: 10px; /* Rounded corners */
-    padding: 10px 20px; /* Size */
-    color: white; /* Text color */
-    font-size: 16px; /* Text size */
-    font-family: 'Arial', sans-serif;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Soft shadow */
-    cursor: pointer;
-    transition: transform 0.3s, box-shadow 0.3s;
+div.arrow-left {
+  transform: rotate(90deg);
+}
+
+div.arrow-right {
+  transform: rotate(-90deg);
+}
+
+div.arrow-large {
+  scale: 1.5;
+}
+
+div.enter-interaction,
+div.module-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: calc(70% - 77px);
+  bottom: 65px;
+  width: 154px;
+  height: 52px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  border-radius: 29px;
+  background-color: white;
+}
+
+div.enter-interaction>.arrow-small>svg {
+  fill: #0084FF;
+  opacity: 1;
+}
+
+div.module-btn>.arrow-large>svg {
+  fill: #0084FF;
+}
+
+div.enter-interaction>div.btn-content {
+  margin: 0 10px;
+  font-weight: 500;
+}
+
+div.enter-interaction:hover {
+  cursor: move;
+  /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+div.enter-interaction:active {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
+
+div.module-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: calc(50% - 165px);
+  top: calc(100% - 150px);
+  width: 330px;
+  height: 90px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  border-radius: 52px;
+  background-color: white;
+}
+
+div.module-btn>div.btn-content {
+  margin: 0 10px;
+  width: 200px;
+  text-align: center;
+}
+
+div.module-btn>div.btn-content>div.num {
+  font-size: 15px;
+}
+
+div.module-btn>div.btn-content>div.name {
+  font-size: 20px;
+}
+
+div.module-btn>div.arrow-left,
+div.module-btn>div.arrow-right {
+  text-align: center;
+  width: 60px;
+  height: 45px;
+}
+
+div.module-btn>div.btn-content:hover {
+  cursor: default;
+}
+
+div.module-btn>div.arrow-left,
+div.module-btn>div.arrow-right:hover {
+  cursor: pointer;
+}
+
+div.close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: calc(100% - 60px);
+  bottom: calc(100% - 60px);
+  width: 50px;
+  height: 50px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  border-radius: 2px;
+  background-color: white;
+}
+
+div.close-btn>svg {
+  scale: 0.5;
+}
+
+div.close-btn:hover {
+  cursor: pointer;
+}
+
+div.module-desc-container {
+  display: flex;
+  align-items: start;
+  justify-content: start;
+  position: absolute;
+  left: calc(50% - 225px);
+  bottom: calc(25% - 45px);
+  width: 450px;
+  height: 90px;
+  font-family: "Jersey 10", "Plus Jakarta Sans";
+  font-size: 18px;
+  border: 3px double black;
+  text-align: start;
+  letter-spacing: 0.5px;
+  /* border-radius: 52px; */
+  background-color: white;
+}
+
+div.module-desc-content {
+  margin: 10px;
+}
+
+div.module-desc-content:hover {
+  cursor: default;
+}
+
+div.hide {
+  display: none;
+}
+
+
+@media only screen and (max-width: 768px) {
+  div.module-desc-container {
+    width: 400px;
+    left: calc(50% - 200px);
+    /* Adjust width for tablets and smaller screens */
   }
-  
-  button:hover {
-    transform: scale(1.05); /* Slightly enlarges on hover */
-    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.3); /* Deeper shadow on hover */
+}
+
+
+@media only screen and (min-height: 768px) {
+  div.module-btn {
+    top: calc(100% - 100px);
+    /* Adjust width for tablets and smaller screens */
   }
-  
-  button:active {
-    transform: scale(0.98); /* Shrinks slightly when clicked */
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2); /* Softer shadow */
+}
+
+@media only screen and (min-height: 900px) {
+  div.module-btn {
+    top: calc(100% - 150px);
+    /* Adjust width for tablets and smaller screens */
   }
-  
-  /* Responsive Styles */
-  @media screen and (max-width: 768px) {
-    button {
-      padding: 8px 16px; /* Smaller padding for medium screens */
-      font-size: 12px; /* Slightly smaller text */
-    }
+}
+
+@media only screen and (max-width: 480px) {
+  div.module-desc-container {
+    width: 200px;
+    height: 110px;
+    left: calc(50% - 100px);
+    /* Further adjust width for mobile devices */
   }
-  
-  @media screen and (max-width: 480px) {
-    button {
-      padding: 6px 12px; /* Smaller padding for small screens */
-      font-size: 10px; /* Smaller text size */
-      border-radius: 8px; /* Reduce border radius for smaller devices */
-    }
-  }
-  
+}

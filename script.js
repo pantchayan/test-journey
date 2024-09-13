@@ -1114,7 +1114,7 @@ let animate = () => {
   // ORBIT CONTROLS HANDLER
   if (controls) {
     controls.update();
-    camera.lookAt(new THREE.Vector3(-2, 5, 0));
+    camera.lookAt(new THREE.Vector3(-1, 5, 0));
   }
 
   // DIRECTIONAL LIGHT TRANSFORM
@@ -1287,6 +1287,11 @@ let changeViewEventListener = () => {
   cameraData.type = 'Orthographic'
   camera = orthographicCamera;
   camera.position.set(0, 26, 100);
+
+  gui.add(camera.position, 'x').min(-10).max(50).step(0.01);
+  gui.add(camera.position, 'y').min(-10).max(50).step(0.01);
+  gui.add(camera.position, 'z').min(-10).max(50).step(0.01);
+
   if (window.innerWidth < 650) {
     cameraData.frustumSize = 32;
     camera.position.y = 30;
@@ -1301,16 +1306,23 @@ let changeViewEventListener = () => {
   camera.right = (cameraData.frustumSize * aspect) / 2
   camera.top = cameraData.frustumSize / 2
   camera.bottom = -cameraData.frustumSize / 2
-  camera.lookAt(new THREE.Vector3(-2, 5, 0));
+  camera.lookAt(new THREE.Vector3(-1, 5, 0));
   camera.updateProjectionMatrix();
   directionalLight.position.x = 5
   planeMaterial.uniforms.uWaveFrequency.value = 0.04
   planeMaterial.uniforms.uWaveSpeed.value = 0.2
   scene.remove(bgPlane)
   planeMesh.scale.set(1, 1.6, 1);
-  document.querySelector('.change-view').style.display = 'none';
-  document.querySelector('.next-view').style.display = 'block';
-  document.querySelector('.prev-view').style.display = 'block';
+  // document.querySelector('.change-view').style.display = 'none';
+  // document.querySelector('.next-view').style.display = 'block';
+  // document.querySelector('.prev-view').style.display = 'block';
+
+  document.querySelector('div.module-btn').classList.remove('hide');
+  document.querySelector('div.module-desc-container').classList.remove('hide');
+  document.querySelector('div.enter-interaction').classList.add('hide');
+
+  loadModule()
+  updateModuleBtn();
 
   renewControls();
   if (controls) {
@@ -1359,6 +1371,9 @@ let changeMode = () => {
   let targetSunColor;
   let currSunPos;
   let targetSunPos;
+  let textColor2D;
+  let bgColor2D;
+  let svgColor;
   if (CURRENT_MODE == 'Night') {
     topColor = new THREE.Color('#fdbe35')
     bottomColor = new THREE.Color('#4d3c00')
@@ -1372,8 +1387,11 @@ let changeMode = () => {
     bgPlaneColor = new THREE.Color('#6f96b3');
     currSunPos = [-60, 55, -50];
     targetSunPos = [20, -5, -50];
-    gsap.to(scene, { backgroundIntensity: 0.58, duration: 2 })
+    gsap.to(scene, { backgroundIntensity: 0.58, duration: 2 });
 
+    textColor2D = '#fff';
+    bgColor2D = '#ebebeb';
+    svgColor = '#0084FF'
     // bgGradient = `linear-gradient(rgba(2, 4, 42, 1) 0%, rgba(9, 70, 121, 1) 20%, rgb(225 141 75) 46%)`;
   }
   else {
@@ -1388,6 +1406,9 @@ let changeMode = () => {
     currSunPos = [20, -5, -50];
     targetSunPos = [-60, 55, -50];
 
+    textColor2D = '#000';
+    bgColor2D = '#fff';
+    svgColor = 'blue'
     gsap.to(scene, { backgroundIntensity: 1, duration: 2 })
   }
   gsap.to(planeMaterial.uniforms.uTopColor.value, { r: topColor.r, g: topColor.g, b: topColor.b, duration: 2 })
@@ -1423,6 +1444,19 @@ let changeMode = () => {
   gsap.to(sunMesh.position, { x: targetSunPos[0], y: targetSunPos[1], z: targetSunPos[2], duration: 2, onComplete: () => { scene.remove(sunMesh) } })
 
   gsap.to(sunMesh.material.color, { r: targetSunColor.r, g: targetSunColor.g, b: targetSunColor.b, duration: 2 })
+
+  document.querySelector('.change-view').style.backgroundColor = bgColor2D
+  // document.querySelector('.change-view').style.color = textColor2D
+
+  document.querySelector('div.module-btn').style.backgroundColor = bgColor2D
+  // document.querySelector('div.module-btn').style.color = textColor2D
+
+  document.querySelector('div.module-desc-container').style.backgroundColor = bgColor2D
+  // document.querySelector('div.module-desc-container').style.color = textColor2D
+
+  // document.querySelector('div.enter-interaction').style.color = textColor2D
+
+
   setTimeout(() => {
     MODE_CHANGING = false;
   }, 2000)
@@ -1774,7 +1808,7 @@ let module5Animation = (stage) => {
               obj.material.flatShading = true;
               obj.material.emmisiveIntensity = 0;
               gsap.to(obj.material.color, { r: c.r, g: c.g, b: c.b, duration: 2 })
-              gsap.to(spotLight, { intensity: 0, duration: 1.5 })
+              gsap.to(carSpotLight, { intensity: 0, duration: 1.5 })
             }
           })
         }
@@ -1785,7 +1819,7 @@ let module5Animation = (stage) => {
               obj.material.flatShading = true;
               obj.material.emmisiveIntensity = 0;
               gsap.to(obj.material.color, { r: c.r, g: c.g, b: c.b, duration: 2 })
-              gsap.to(spotLight, { intensity: 6, duration: 1.5 })
+              gsap.to(carSpotLight, { intensity: 6, duration: 1.5 })
             }
           })
         }
@@ -1796,7 +1830,7 @@ let module5Animation = (stage) => {
               obj.material.flatShading = true;
               obj.material.emmisiveIntensity = 0;
               gsap.to(obj.material.color, { r: c.r, g: c.g, b: c.b, duration: 2 })
-              gsap.to(spotLight, { intensity: 0, duration: 1.5 })
+              gsap.to(carSpotLight, { intensity: 0, duration: 1.5 })
             }
           })
         }
@@ -2616,12 +2650,203 @@ let module9Animation = (stage) => {
 }
 
 
+let moduleTitleInfo = [
+  {
+    num: 'Welcome to',
+    name: 'PlugXR University'
+  },
+  {
+    num: '01',
+    name: 'Basic Concepts'
+  },
+  {
+    num: '02',
+    name: 'Intermediate<br>Techniques'
+  },
+  {
+    num: '03',
+    name: '3D Portfolio<br>Website'
+  },
+  {
+    num: '04',
+    name: '3D Models<br>& Animations'
+  },
+  {
+    num: '05',
+    name: 'Car<br>Configurator'
+  },
+  {
+    num: '06',
+    name: 'Shaders'
+  },
+  {
+    num: '07',
+    name: 'Making<br>Audio Visualiser'
+  },
+  {
+    num: '08',
+    name: 'Advance<br>Techniques'
+  },
+  {
+    num: '09',
+    name: '3D Game'
+  },
+]
+let moduleDescArr = [
+  [
+    'Welcome to the Advanced 3D Web Development with Three.js course, where you will explore 9 exciting modules.',
+    'Use the controls below to navigate and discover what each module covers in detail.'
+  ],
+  [
+    'Start your journey by understanding the essentials of 3D web development with Three.js.',
+    'This module covers topics like creating and manipulating 3D objects, adding textures and materials.',
+    'By the end, you\'ll be able to build a basic interactive 3D scene.'
+  ],
+  [
+    'Elevate your skills by diving into intermediate concepts such as lighting, shadows, and particles.',
+    'Learn to implement interactive raycasting and work with tools like DebugUI and GSAP animations.',
+    'These techniques will enhance the visual quality and interactivity of your projects.'
+  ],
+  [
+    'Build your very own 3D portfolio website by integrating Three.js with HTML and CSS.',
+    'Use GSAP animations and scroll-based effects to create an immersive website.',
+    'Customise and stand-out with your unique portfolio website.'
+  ],
+  [
+    'Learn the intricacies of working with 3D models in Three.js.',
+    'This module covers the basics of importing and animating models using formats like FBX and GLTF.',
+    'You’ll also explore environment maps and realistic rendering techniques to create stunning scenes.'
+  ],
+  [
+    'Develop a fully functional 3D car configurator where users can modify and visualize a car model.',
+    'This module teaches you how to change parts of a 3D model in real time.',
+    'You will also learn to optimize model rendering and add loading screens for a seamless experience.'
+  ],
+  [
+    'Explore the world of shaders to add advanced visual effects to your 3D scenes.',
+    'Learn the basics of the shader pipeline and create configurable shaders for wave simulations.',
+    'This module equips you with the skills to develop custom shaders for unique visual effects.'
+  ],
+  [
+    'Combine 3D visuals with audio in this exciting module.',
+    'Learn to synchronize visual elements with audio input using Shaders to create a dynamic audio visualizer.',
+    'You will build a project demonstrating real-time visual effects responding to music or sounds.'
+  ],
+  [
+    'Push the boundaries of 3D development with advanced techniques such as physics simulations.',
+    'Learn post-processing effects, surface sampling for animations, and work with instanced meshes.',
+    'These techniques enable you to handle large numbers of objects efficiently in your scenes.'
+  ],
+  [
+    'Develop a fully-fledged 3D game from scratch, covering game loops, player controls, and more.',
+    'This module walks you through core game mechanics such as collision detection and infinite world generation.',
+    'Implement scoring, rewards, sounds, and storage for a complete gaming experience.'
+  ]
+];
+
+
+
+// Function to update button opacity
+function updateButtonOpacity(opacity) {
+  document.querySelector('div.module-btn>div.arrow-left>svg').style.opacity = opacity;
+  document.querySelector('div.module-btn>div.arrow-right>svg').style.opacity = opacity;
+}
+
+
+// Throttling function
+function throttle(func, limit) {
+  let inThrottle;
+  return function () {
+    const args = arguments;
+    const context = this;
+    if (!inThrottle) {
+      console.log('Lowering')
+      func.apply(context, args);
+      inThrottle = true;
+      updateButtonOpacity(0.1);
+      setTimeout(() => { inThrottle = false; console.log('High'); updateButtonOpacity(1); }, limit);
+    }
+  }
+}
 
 let prevModuleNum = -1;
 let currModuleNum = 0;
 let nextModuleNum = 1;
+let moduleBtn = document.querySelector('div.module-btn>div.btn-content');
+let moduleDesc = document.querySelector('div.module-desc-content');
 
-document.querySelector('.next-view').addEventListener('click', () => {
+let intervalId;
+let timeoutID;
+let currentLineIndex = 0;
+
+// Function to clear previous text and prepare for animation
+let clearText = () => {
+  moduleDesc.innerHTML = '';
+}
+// Function to render each line letter by letter
+let renderLineLetterByLetter = (line) => {
+  clearInterval(intervalId);
+  clearTimeout(timeoutID);
+  clearText();
+  let charIndex = 0;
+  intervalId = setInterval(() => {
+    if (charIndex < line.length) {
+      moduleDesc.innerHTML += line[charIndex];
+      charIndex++;
+    } else {
+      clearInterval(intervalId);
+      // Call next line after 2 seconds delay
+      timeoutID = setTimeout(nextLine, 2000);
+    }
+  }, 30); // Letter appears every 100ms
+}
+
+// Function to load the next line
+function nextLine() {
+  const moduleLineSet = moduleDescArr[currModuleNum];
+  if (currentLineIndex < moduleLineSet.length) {
+    renderLineLetterByLetter(moduleLineSet[currentLineIndex]);
+    currentLineIndex++;
+  } else {
+    // Reset line index for the next module
+    currentLineIndex = 0;
+  }
+}
+
+// Function to load a specific module
+function loadModule() {
+  clearInterval(intervalId);
+  clearTimeout(timeoutID);
+  currentLineIndex = 0;
+  nextLine(); // Start rendering the first line of the new module
+}
+
+
+
+let updateModuleBtn = () => {
+  moduleBtn.innerHTML = `
+  <div class="num">${moduleTitleInfo[currModuleNum].num}</div>
+  <div class="name">${moduleTitleInfo[currModuleNum].name}</div>
+  `
+
+  if (currModuleNum == 0) {
+    document.querySelector('div.module-btn>div.arrow-left>svg').style.opacity = 0.1;
+  }
+  else {
+    document.querySelector('div.module-btn>div.arrow-left>svg').style.opacity = 1;
+  }
+
+  if (currModuleNum == 9) {
+    document.querySelector('div.module-btn>div.arrow-right>svg').style.opacity = 0.1;
+  }
+  else {
+    document.querySelector('div.module-btn>div.arrow-right>svg').style.opacity = 1;
+  }
+}
+
+
+
+document.querySelector('.next-view').addEventListener('click', throttle(() => {
   gsap.to(camera.position, { x: cameraPos.x, y: cameraPos.y, z: cameraPos.z, duration: 0.5 });
   renewControls()
 
@@ -2694,12 +2919,17 @@ document.querySelector('.next-view').addEventListener('click', () => {
   }
 
   console.log(prevModuleNum, currModuleNum, nextModuleNum)
-})
+
+  updateModuleBtn();
+  loadModule();
+}, 2500))
 
 
-document.querySelector('.prev-view').addEventListener('click', () => {
+document.querySelector('.prev-view').addEventListener('click', throttle(() => {
   renewControls()
   gsap.to(camera.position, { x: cameraPos.x, y: cameraPos.y, z: cameraPos.z, duration: 0.5 });
+
+
 
   if (currModuleNum === 0) {
     return;
@@ -2769,6 +2999,19 @@ document.querySelector('.prev-view').addEventListener('click', () => {
     prevModuleNum = currModuleNum - 1;
   }
   console.log(prevModuleNum, currModuleNum, nextModuleNum)
-})
+  updateModuleBtn();
+  loadModule()
+}, 2500))
 
 gui.close()
+gui.hide()
+
+window.addEventListener("keydown", (event) => {
+  if(event.key ==='h'){
+    gui.hide();
+  }
+
+  if(event.key ==='s'){
+    gui.show();
+  }
+});
