@@ -159,7 +159,7 @@ div.hide {
 }
 
 
-@media only screen and (min-height: 768px) {
+@media only screen and (min-height: 700px) {
   div.module-btn {
     top: calc(100% - 100px);
     /* Adjust width for tablets and smaller screens */
