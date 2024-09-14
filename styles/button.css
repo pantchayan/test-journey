@@ -102,17 +102,18 @@ div.close-btn {
   align-items: center;
   justify-content: center;
   position: absolute;
-  left: calc(100% - 60px);
-  bottom: calc(100% - 60px);
-  width: 50px;
-  height: 50px;
+  left: calc(100% - 50px);
+  bottom: calc(100% - 50px);
+  width: 40px;
+  height: 40px;
   font-family: "Plus Jakarta Sans", sans-serif;
-  border-radius: 2px;
+  border-radius: 14px;
   background-color: white;
 }
 
 div.close-btn>svg {
-  scale: 0.5;
+  scale: 2.5;
+  fill: #0A365D;
 }
 
 div.close-btn:hover {
@@ -148,6 +149,44 @@ div.module-desc-content:hover {
 div.hide {
   display: none;
 }
+
+div.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: calc(100% - 50px);
+  bottom: calc(100% - 50px);
+  width: 40px;
+  height: 40px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  border-radius: 14px;
+  background-color: white;
+}
+
+div.left-align{
+  left: 10px;
+}
+
+div.theme-toggle-btn>svg.sun {
+  scale: 0.8;
+  fill: #ffdb3c;
+}
+
+
+div.theme-toggle-btn>svg.moon {
+  scale: 0.7;
+  fill: #0A365D;
+}
+
+div.theme-toggle-btn:hover {
+  cursor: pointer;
+}
+
+svg.hide {
+  display: none;
+}
+
 
 
 @media only screen and (max-width: 768px) {

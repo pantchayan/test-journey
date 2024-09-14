@@ -1319,7 +1319,9 @@ let changeViewEventListener = () => {
 
   document.querySelector('div.module-btn').classList.remove('hide');
   document.querySelector('div.module-desc-container').classList.remove('hide');
+  document.querySelector('div.close-btn').classList.remove('hide');
   document.querySelector('div.enter-interaction').classList.add('hide');
+  document.querySelector('div.theme-toggle-btn').classList.add('left-align')
 
   loadModule()
   updateModuleBtn();
@@ -1344,17 +1346,23 @@ document.querySelector('.change-view').addEventListener('click', () => {
 
 let CURRENT_MODE = 'Day';
 let MODE_CHANGING = false;
-document.querySelector('.toggle-mode').addEventListener('click', () => {
+document.querySelector('.theme-toggle-btn').addEventListener('click', () => {
   console.log('Toggle mode:', CURRENT_MODE);
   if (CURRENT_MODE == 'Day' && !MODE_CHANGING && document.querySelector('.toggle-mode').innerText == 'NIGHT MODE') {
     CURRENT_MODE = 'Night'
     changeMode();
+    document.querySelector('div.theme-toggle-btn').style.backgroundColor = '#0A365D';
+    document.querySelector('div.theme-toggle-btn>svg.sun').classList.remove('hide');
+    document.querySelector('div.theme-toggle-btn>svg.moon').classList.add('hide');
     document.querySelector('.toggle-mode').innerText = 'DAY MODE';
     MODE_CHANGING = true;
   }
   else if (CURRENT_MODE == 'Night' && !MODE_CHANGING && document.querySelector('.toggle-mode').innerText == 'DAY MODE') {
     CURRENT_MODE = 'Day'
     changeMode();
+    document.querySelector('div.theme-toggle-btn').style.backgroundColor = '#fff';
+    document.querySelector('div.theme-toggle-btn>svg.sun').classList.add('hide');
+    document.querySelector('div.theme-toggle-btn>svg.moon').classList.remove('hide');
     document.querySelector('.toggle-mode').innerText = 'NIGHT MODE'
     MODE_CHANGING = true;
   }
@@ -1392,6 +1400,10 @@ let changeMode = () => {
     textColor2D = '#fff';
     bgColor2D = '#ebebeb';
     svgColor = '#0084FF'
+
+
+    document.querySelector('div.close-btn').style.backgroundColor = '#0A365D';
+    document.querySelector('div.close-btn>svg').style.fill = '#ebebeb';
     // bgGradient = `linear-gradient(rgba(2, 4, 42, 1) 0%, rgba(9, 70, 121, 1) 20%, rgb(225 141 75) 46%)`;
   }
   else {
@@ -1410,6 +1422,10 @@ let changeMode = () => {
     bgColor2D = '#fff';
     svgColor = 'blue'
     gsap.to(scene, { backgroundIntensity: 1, duration: 2 })
+
+
+    document.querySelector('div.close-btn').style.backgroundColor = '#fff';
+    document.querySelector('div.close-btn>svg').style.fill = '#0A365D';
   }
   gsap.to(planeMaterial.uniforms.uTopColor.value, { r: topColor.r, g: topColor.g, b: topColor.b, duration: 2 })
   gsap.to(planeMaterial.uniforms.uBottomColor.value, { r: bottomColor.r, g: bottomColor.g, b: bottomColor.b, duration: 2 })
@@ -1454,7 +1470,6 @@ let changeMode = () => {
   document.querySelector('div.module-desc-container').style.backgroundColor = bgColor2D
   // document.querySelector('div.module-desc-container').style.color = textColor2D
 
-  // document.querySelector('div.enter-interaction').style.color = textColor2D
 
 
   setTimeout(() => {
@@ -1537,6 +1552,7 @@ let module1Animation = (stage) => {
     // module1Group.add(spotLightHelper);
 
     module1Group.scale.set(2, 2, 2)
+    module1Group.position.y = -6
     scene.add(module1Group);
 
     let groupAnimation = () => {
@@ -2479,6 +2495,7 @@ let module9Animation = (stage) => {
       // })
       canvas.removeEventListener('click', gameMenuBtnClickListener, true);
       canvas.addEventListener('click', gameBtnClickListener, true)
+      canvas.addEventListener('touchstart', gameBtnClickListener, true)
 
       let removeItem = (item) => {
 
@@ -2566,6 +2583,7 @@ let module9Animation = (stage) => {
             textMesh.geometry = createText(`Highest Score: ${currScore}`)
             gsap.to(textMesh.position, { x: 0.0, y: 10, z: 3.85, duration: 0.6 })
             canvas.removeEventListener('click', gameBtnClickListener, true);
+            canvas.removeEventListener('touchstart', gameBtnClickListener, true)
             canvas.addEventListener('click', gameMenuBtnClickListener, true);
             gameFlag = false;
           }, 3000)
@@ -2634,6 +2652,7 @@ let module9Animation = (stage) => {
     currItemHover = undefined;
     gameFlag = false;
     canvas.removeEventListener('click', gameBtnClickListener, true);
+    canvas.removeEventListener('touchstart', gameBtnClickListener, true)
     canvas.removeEventListener('click', gameMenuBtnClickListener, true);
     clearInterval(roundInterval)
     gsap.to(module9Group.position, {
@@ -2750,6 +2769,13 @@ let moduleDescArr = [
 function updateButtonOpacity(opacity) {
   document.querySelector('div.module-btn>div.arrow-left>svg').style.opacity = opacity;
   document.querySelector('div.module-btn>div.arrow-right>svg').style.opacity = opacity;
+
+  if (currModuleNum == 0) {
+    document.querySelector('div.module-btn>div.arrow-left>svg').style.opacity = 0.2;
+  }
+  if (currModuleNum == 9) {
+    document.querySelector('div.module-btn>div.arrow-right>svg').style.opacity = 0.2;
+  }
 }
 
 
@@ -2763,7 +2789,7 @@ function throttle(func, limit) {
       console.log('Lowering')
       func.apply(context, args);
       inThrottle = true;
-      updateButtonOpacity(0.1);
+      updateButtonOpacity(0.2);
       setTimeout(() => { inThrottle = false; console.log('High'); updateButtonOpacity(1); }, limit);
     }
   }
@@ -2830,14 +2856,14 @@ let updateModuleBtn = () => {
   `
 
   if (currModuleNum == 0) {
-    document.querySelector('div.module-btn>div.arrow-left>svg').style.opacity = 0.1;
+    document.querySelector('div.module-btn>div.arrow-left>svg').style.opacity = 0.2;
   }
   else {
     document.querySelector('div.module-btn>div.arrow-left>svg').style.opacity = 1;
   }
 
   if (currModuleNum == 9) {
-    document.querySelector('div.module-btn>div.arrow-right>svg').style.opacity = 0.1;
+    document.querySelector('div.module-btn>div.arrow-right>svg').style.opacity = 0.2;
   }
   else {
     document.querySelector('div.module-btn>div.arrow-right>svg').style.opacity = 1;
@@ -2920,8 +2946,8 @@ document.querySelector('.next-view').addEventListener('click', throttle(() => {
 
   console.log(prevModuleNum, currModuleNum, nextModuleNum)
 
-  updateModuleBtn();
   loadModule();
+  updateModuleBtn();
 }, 2500))
 
 
@@ -2999,19 +3025,19 @@ document.querySelector('.prev-view').addEventListener('click', throttle(() => {
     prevModuleNum = currModuleNum - 1;
   }
   console.log(prevModuleNum, currModuleNum, nextModuleNum)
-  updateModuleBtn();
   loadModule()
+  updateModuleBtn();
 }, 2500))
 
 gui.close()
 gui.hide()
 
 window.addEventListener("keydown", (event) => {
-  if(event.key ==='h'){
+  if (event.key === 'h') {
     gui.hide();
   }
 
-  if(event.key ==='s'){
+  if (event.key === 's') {
     gui.show();
   }
 });
