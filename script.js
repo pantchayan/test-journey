@@ -1085,7 +1085,9 @@ let animate = () => {
 
   // BOAT ANIMATION
   if (boatModel && showBoat) {
-    boatModel.position.y = Math.sin(elapsedTime * 0.5 * 2.5) * 0.1 + 1.9;
+    let yDiff = (Math.sin(elapsedTime * 0.5 * 2.5) * 0.1 + 1.9);
+    if (boatModel.position.y - yDiff < 0.001 || yDiff - boatModel.position.y < 0.001)
+      boatModel.position.y = yDiff
     boatModel.rotation.z = Math.cos(elapsedTime * 0.5 * 2.5) * 0.05;
   }
   planeMaterial.uniforms.uTime.value = elapsedTime;
@@ -1283,14 +1285,14 @@ let renewControls = () => {
   controls.minZoom = 1;
 }
 let cameraPos = { x: 0, y: 26, z: 100 }
-let changeViewEventListener = () => {
+let switchOrthographicView = () => {
   cameraData.type = 'Orthographic'
   camera = orthographicCamera;
   camera.position.set(0, 26, 100);
 
-  gui.add(camera.position, 'x').min(-10).max(50).step(0.01);
-  gui.add(camera.position, 'y').min(-10).max(50).step(0.01);
-  gui.add(camera.position, 'z').min(-10).max(50).step(0.01);
+  // gui.add(camera.position, 'x').min(-10).max(50).step(0.01);
+  // gui.add(camera.position, 'y').min(-10).max(50).step(0.01);
+  // gui.add(camera.position, 'z').min(-10).max(50).step(0.01);
 
   if (window.innerWidth < 650) {
     cameraData.frustumSize = 32;
@@ -1321,7 +1323,30 @@ let changeViewEventListener = () => {
   document.querySelector('div.module-desc-container').classList.remove('hide');
   document.querySelector('div.close-btn').classList.remove('hide');
   document.querySelector('div.enter-interaction').classList.add('hide');
-  document.querySelector('div.theme-toggle-btn').classList.add('left-align')
+  document.querySelector('div.theme-toggle-btn').classList.add('left-align');
+
+
+  let pointer = document.querySelector('div.pointer');
+  pointer.classList.remove('hide');
+  const centerX = window.innerWidth / 2;
+  gsap.killTweensOf(pointer);
+  gsap.set(pointer, {       // Time it takes to complete one oscillation
+    x: centerX + 100,
+  })
+  
+  gsap.to(pointer, {
+    duration: 1,        // Time it takes to complete one oscillation
+    x: centerX - 100,             // Move to the right by 300px
+    repeat: 6,         // Infinite repeats
+    yoyo: true,         // Reverses back after moving to the right
+    ease: "power1.inOut", // Smooth in-out effect
+    onComplete: () => {
+      // Fade out the pointer div after 5 oscillations
+      pointer.classList.add('hide');
+    }
+  });
+  // gsap.to(pointer, {x: 100, duration:1, repeat:-1})
+  // gsap.to(pointer, {x: -100, duration:1, delay:1, repeat:-1})
 
   loadModule()
   updateModuleBtn();
@@ -1338,16 +1363,88 @@ let changeViewEventListener = () => {
   cloudModelArr[1].position.y -= 4;
   cloudModelArr[2].position.y -= 2;
 }
-document.querySelector('.change-view').addEventListener('click', () => {
+
+let animHappened = false;
+let switchPerspectiveView = () => {
+  if (currModuleNum != 0) {
+    // scene.remove(landMesh);
+    landMesh.position.x += 1.5;
+    // let pseudoLand;
+    // islandModel.traverse((obj) => {
+    //   if (obj.isMesh) {
+    //     if (obj.name == 'land') {
+    //       pseudoLand = obj.clone();
+    //       scene.add(pseudoLand);
+    //       // landMesh.position.x = -1.5;
+    //       // landMesh.position.y = -0.45;
+    //       // landMesh.rotation.y = -Math.PI / 3;
+    //       // landMesh.scale.set(10, 10, 10);
+    //     }
+    //   }
+    // })
+    let func = (animFuncArr[currModuleNum])
+    func('destroy');
+    module0Animation('build');
+    setTimeout(() => {
+      scene.remove(landMesh)
+    }, 2000)
+  }
+
+  if (animHappened && currModuleNum == 0) {
+    // console.log('HERe')
+    scene.remove(landMesh)
+  }
+
+
+  cameraData.type = 'Perspective'
+  camera = perspectiveCamera;
+  camera.position.set(-8, 8, 25);
+  controls = undefined;
+  camera.lookAt(new THREE.Vector3(-8, 8, 0));
+
+  plugeeModel.position.x += 1.5;
+  boatModel.position.x += 1.5;
+  islandModel.position.x += 1.5;
+
+  cloudModelArr[0].position.y += 1;
+  cloudModelArr[1].position.y += 4;
+  cloudModelArr[2].position.y += 2;
+
+
+  planeMaterial.uniforms.uWaveFrequency.value = 0.07
+  planeMaterial.uniforms.uWaveSpeed.value = 0.4
+  planeMesh.scale.set(1, 1, 1);
+  scene.add(bgPlane)
+
+  document.querySelector('div.module-btn').classList.add('hide');
+  document.querySelector('div.module-desc-container').classList.add('hide');
+  document.querySelector('div.close-btn').classList.add('hide');
+  document.querySelector('div.enter-interaction').classList.remove('hide');
+  document.querySelector('div.theme-toggle-btn').classList.remove('left-align');
+  document.querySelector('div.pointer').classList.add('hide');
+
+  prevModuleNum = -1;
+  currModuleNum = 0;
+  nextModuleNum = 1;
+}
+
+let changeViewEventListener = () => {
+  // console.log(camera.type)
   setTimeout(() => {
-    changeViewEventListener();
+    if (camera.type === 'PerspectiveCamera')
+      switchOrthographicView();
+    else
+      switchPerspectiveView();
   }, 0)
-})
+}
+
+document.querySelector('.change-view').addEventListener('click', changeViewEventListener);
+document.querySelector('div.close-btn').addEventListener('click', changeViewEventListener);
 
 let CURRENT_MODE = 'Day';
 let MODE_CHANGING = false;
 document.querySelector('.theme-toggle-btn').addEventListener('click', () => {
-  console.log('Toggle mode:', CURRENT_MODE);
+  // console.log('Toggle mode:', CURRENT_MODE);
   if (CURRENT_MODE == 'Day' && !MODE_CHANGING && document.querySelector('.toggle-mode').innerText == 'NIGHT MODE') {
     CURRENT_MODE = 'Night'
     changeMode();
@@ -1429,7 +1526,7 @@ let changeMode = () => {
   }
   gsap.to(planeMaterial.uniforms.uTopColor.value, { r: topColor.r, g: topColor.g, b: topColor.b, duration: 2 })
   gsap.to(planeMaterial.uniforms.uBottomColor.value, { r: bottomColor.r, g: bottomColor.g, b: bottomColor.b, duration: 2 })
-  console.log(lightColor)
+  // console.log(lightColor)
   gsap.to(directionalLight.color, { r: lightColor.r, g: lightColor.g, b: lightColor.b, duration: 2 })
   gsap.to(document.querySelector('body'), {
     background: bgGradient,
@@ -1477,6 +1574,7 @@ let changeMode = () => {
   }, 2000)
 }
 
+let landMesh;
 let module0Animation = (stage) => {
   if (stage === 'build') {
     scene.add(islandModel);
@@ -1488,12 +1586,13 @@ let module0Animation = (stage) => {
     }, 1000)
     gsap.to(islandModel.position, { y: -0.45, duration: 1.0, delay: 1.0, ease: "expoScale(0.5,7,power1.in)", })
     gsap.to(boatModel.position, { y: 2, duration: 1.0, delay: 1.0, ease: "expoScale(0.5,7,power1.in)", })
+
   }
   else if (stage === 'destroy') {
     islandModel.traverse((obj) => {
       if (obj.isMesh) {
         if (obj.name == 'land') {
-          let landMesh = obj.clone();
+          landMesh = obj.clone();
           scene.add(landMesh);
           landMesh.position.x = -1.5;
           landMesh.position.y = -0.45;
@@ -2763,7 +2862,18 @@ let moduleDescArr = [
   ]
 ];
 
-
+let animFuncArr = [
+  module0Animation,
+  module1Animation,
+  module2Animation,
+  module3Animation,
+  module4Animation,
+  module5Animation,
+  module6Animation,
+  module7Animation,
+  module8Animation,
+  module9Animation
+]
 
 // Function to update button opacity
 function updateButtonOpacity(opacity) {
@@ -2786,11 +2896,11 @@ function throttle(func, limit) {
     const args = arguments;
     const context = this;
     if (!inThrottle) {
-      console.log('Lowering')
+      // console.log('Lowering')
       func.apply(context, args);
       inThrottle = true;
       updateButtonOpacity(0.2);
-      setTimeout(() => { inThrottle = false; console.log('High'); updateButtonOpacity(1); }, limit);
+      setTimeout(() => { inThrottle = false; updateButtonOpacity(1); }, limit);
     }
   }
 }
@@ -2873,6 +2983,7 @@ let updateModuleBtn = () => {
 
 
 document.querySelector('.next-view').addEventListener('click', throttle(() => {
+  animHappened = true;
   gsap.to(camera.position, { x: cameraPos.x, y: cameraPos.y, z: cameraPos.z, duration: 0.5 });
   renewControls()
 
@@ -2944,7 +3055,7 @@ document.querySelector('.next-view').addEventListener('click', throttle(() => {
     return;
   }
 
-  console.log(prevModuleNum, currModuleNum, nextModuleNum)
+  // console.log(prevModuleNum, currModuleNum, nextModuleNum)
 
   loadModule();
   updateModuleBtn();
@@ -2954,7 +3065,6 @@ document.querySelector('.next-view').addEventListener('click', throttle(() => {
 document.querySelector('.prev-view').addEventListener('click', throttle(() => {
   renewControls()
   gsap.to(camera.position, { x: cameraPos.x, y: cameraPos.y, z: cameraPos.z, duration: 0.5 });
-
 
 
   if (currModuleNum === 0) {
@@ -3024,7 +3134,7 @@ document.querySelector('.prev-view').addEventListener('click', throttle(() => {
     currModuleNum = prevModuleNum;
     prevModuleNum = currModuleNum - 1;
   }
-  console.log(prevModuleNum, currModuleNum, nextModuleNum)
+  // console.log(prevModuleNum, currModuleNum, nextModuleNum)
   loadModule()
   updateModuleBtn();
 }, 2500))

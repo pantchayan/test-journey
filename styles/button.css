@@ -164,7 +164,7 @@ div.theme-toggle-btn {
   background-color: white;
 }
 
-div.left-align{
+div.left-align {
   left: 10px;
 }
 
@@ -219,4 +219,14 @@ svg.hide {
     left: calc(50% - 100px);
     /* Further adjust width for mobile devices */
   }
+}
+
+div.pointer {
+  /* border: 2px solid black; */
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  top: 60%;
+  transform: translateY(-50%);
+  /* Center vertically */
 }
