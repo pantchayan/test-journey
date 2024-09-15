@@ -739,7 +739,7 @@ itemUpAudio.volume = 0.5;
 const itemDownAudio = document.getElementById('ItemDownAudio');
 itemDownAudio.volume = 0.5;
 const waveAudio = document.getElementById('WaveAudio');
-waveAudio.volume = 0.4;
+waveAudio.volume = 0.3;
 waveAudio.loop = true;
 const swingAudio = document.getElementById('SwingAudio');
 swingAudio.volume = 0.1;
@@ -1301,12 +1301,13 @@ let renewControls = () => {
 let cameraPos = { x: 0, y: 26, z: 100 }
 let switchOrthographicView = () => {
   waveAudio.play();
+  waveAudio.volume = 0.3;
   swingAudio.play();
   swingAudio.volume = 0;
   gsap.to(
     swingAudio,
     {
-      volume: 0.16,
+      volume: 0.12,
       duration: 3.5
     }
   )
