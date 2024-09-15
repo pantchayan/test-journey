@@ -213,7 +213,7 @@ div.pointer>svg{
 }
 
 
-@media only screen and (min-height: 700px) {
+@media only screen and (min-height: 400px) {
   div.module-btn {
     top: calc(100% - 100px);
     /* Adjust width for tablets and smaller screens */
