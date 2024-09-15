@@ -731,12 +731,26 @@ let controls;
 
 const levelChangeAudio = document.getElementById('levelChangeAudio');
 const crashAudio = document.getElementById('crashAudio');
+crashAudio.volume = 0.5
 const pointAudio = document.getElementById('PointAudio');
 const bombAudio = document.getElementById('BombAudio');
 const itemUpAudio = document.getElementById('ItemUpAudio');
 itemUpAudio.volume = 0.5;
 const itemDownAudio = document.getElementById('ItemDownAudio');
 itemDownAudio.volume = 0.5;
+const waveAudio = document.getElementById('WaveAudio');
+waveAudio.volume = 0.4;
+waveAudio.loop = true;
+const swingAudio = document.getElementById('SwingAudio');
+swingAudio.volume = 0.1;
+swingAudio.loop = true;
+
+gui.add(waveAudio, 'volume').min(0).max(1).step(0.01);
+gui.add(swingAudio, 'volume').min(0).max(1).step(0.01);
+
+gui.add(levelChangeAudio, 'volume').min(0).max(1).step(0.01);
+gui.add(crashAudio, 'volume').min(0).max(1).step(0.01);
+
 let module1Group;
 let module1Interval;
 let module2Group;
@@ -1286,6 +1300,16 @@ let renewControls = () => {
 }
 let cameraPos = { x: 0, y: 26, z: 100 }
 let switchOrthographicView = () => {
+  waveAudio.play();
+  swingAudio.play();
+  swingAudio.volume = 0;
+  gsap.to(
+    swingAudio,
+    {
+      volume: 0.16,
+      duration: 3.5
+    }
+  )
   cameraData.type = 'Orthographic'
   camera = orthographicCamera;
   camera.position.set(0, 26, 100);
@@ -1308,7 +1332,7 @@ let switchOrthographicView = () => {
   camera.right = (cameraData.frustumSize * aspect) / 2
   camera.top = cameraData.frustumSize / 2
   camera.bottom = -cameraData.frustumSize / 2
-  camera.lookAt(new THREE.Vector3(-1, 5, 0));
+  // camera.lookAt(new THREE.Vector3(-1, 5, 0));
   camera.updateProjectionMatrix();
   directionalLight.position.x = 5
   planeMaterial.uniforms.uWaveFrequency.value = 0.04
@@ -1333,11 +1357,11 @@ let switchOrthographicView = () => {
   gsap.set(pointer, {       // Time it takes to complete one oscillation
     x: centerX + 100,
   })
-  
+
   gsap.to(pointer, {
     duration: 1,        // Time it takes to complete one oscillation
     x: centerX - 100,             // Move to the right by 300px
-    repeat: 6,         // Infinite repeats
+    repeat: 5,         // Infinite repeats
     yoyo: true,         // Reverses back after moving to the right
     ease: "power1.inOut", // Smooth in-out effect
     onComplete: () => {
@@ -1365,7 +1389,31 @@ let switchOrthographicView = () => {
 }
 
 let animHappened = false;
+let delIslandTimeout;
 let switchPerspectiveView = () => {
+  gsap.to(
+    swingAudio,
+    {
+      volume: 0,
+      duration: 2,
+
+      onComplete: () => {
+        waveAudio.currentTime = 0;
+        swingAudio.currentTime = 0;
+        waveAudio.pause();
+        swingAudio.pause();
+      }
+    }
+  )
+
+  gsap.to(
+    waveAudio,
+    {
+      volume: 0,
+      duration: 2,
+    }
+  )
+
   if (currModuleNum != 0) {
     // scene.remove(landMesh);
     landMesh.position.x += 1.5;
@@ -1384,6 +1432,7 @@ let switchPerspectiveView = () => {
     // })
     let func = (animFuncArr[currModuleNum])
     func('destroy');
+    clearTimeout(delIslandTimeout);
     module0Animation('build');
     setTimeout(() => {
       scene.remove(landMesh)
@@ -1428,14 +1477,12 @@ let switchPerspectiveView = () => {
   nextModuleNum = 1;
 }
 
+
 let changeViewEventListener = () => {
-  // console.log(camera.type)
-  setTimeout(() => {
-    if (camera.type === 'PerspectiveCamera')
-      switchOrthographicView();
-    else
-      switchPerspectiveView();
-  }, 0)
+  if (camera.type === 'PerspectiveCamera')
+    switchOrthographicView();
+  else
+    switchPerspectiveView();
 }
 
 document.querySelector('.change-view').addEventListener('click', changeViewEventListener);
@@ -1608,7 +1655,7 @@ let module0Animation = (stage) => {
     gsap.to(islandModel.position, { y: -15, duration: 1.0, delay: 0.5, ease: "expoScale(0.5,7,power1.in)", })
     gsap.to(boatModel.position, { y: -3, duration: 1.0, delay: 0.9, ease: "expoScale(0.5,7,power1.in)", })
     showBoat = false;
-    setTimeout(() => {
+    delIslandTimeout = setTimeout(() => {
       scene.remove(islandModel)
     }, 1500)
   }

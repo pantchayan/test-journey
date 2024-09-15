@@ -165,7 +165,8 @@ div.theme-toggle-btn {
 }
 
 div.left-align {
-  left: 10px;
+  /* left: 10px; */
+  bottom: calc(100% - 95px);
 }
 
 div.theme-toggle-btn>svg.sun {
@@ -188,6 +189,20 @@ svg.hide {
 }
 
 
+div.pointer {
+  /* border: 2px solid black; */
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  top: 60%;
+  transform: translateY(-50%);
+  /* Center vertically */
+}
+
+
+div.pointer>svg{
+  scale: 5;
+}
 
 @media only screen and (max-width: 768px) {
   div.module-desc-container {
@@ -219,14 +234,7 @@ svg.hide {
     left: calc(50% - 100px);
     /* Further adjust width for mobile devices */
   }
-}
-
-div.pointer {
-  /* border: 2px solid black; */
-  height: 50px;
-  width: 50px;
-  position: absolute;
-  top: 60%;
-  transform: translateY(-50%);
-  /* Center vertically */
+  div.pointer>svg{
+    scale: 5;
+  }
 }
