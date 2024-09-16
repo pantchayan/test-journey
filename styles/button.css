@@ -146,11 +146,7 @@ div.module-desc-content:hover {
   cursor: default;
 }
 
-div.hide {
-  display: none;
-}
-
-div.theme-toggle-btn {
+div.theme-toggle-btn, div.sound-toggle-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -162,6 +158,10 @@ div.theme-toggle-btn {
   font-family: "Plus Jakarta Sans", sans-serif;
   border-radius: 14px;
   background-color: white;
+}
+
+div.sound-toggle-btn{
+  bottom: calc(100% - 140px);
 }
 
 div.left-align {
@@ -187,6 +187,26 @@ div.theme-toggle-btn:hover {
 svg.hide {
   display: none;
 }
+
+div.hide {
+  display: none;
+}
+
+
+div.sound-toggle-btn:hover{
+  cursor: pointer;
+}
+
+div.sound-toggle-btn>svg {
+  scale: 0.7;
+  fill: #0A365D;
+}
+
+div.sound-toggle-btn>svg.sound-off {
+  scale: 0.6;
+}
+
+
 
 
 div.pointer {

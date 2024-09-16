@@ -55,6 +55,11 @@ loadingManager.onLoad = function () {
   setTimeout(() => {
     progressContainer.style.display = 'none';
   }, 50);
+
+
+  setTimeout(() => {
+    document.querySelector('.theme-toggle-btn').click()
+  }, 2500)
 };
 
 loadingManager.onProgress = function (url, itemsLoaded, itemsTotal) {
@@ -735,9 +740,12 @@ crashAudio.volume = 0.5
 const pointAudio = document.getElementById('PointAudio');
 const bombAudio = document.getElementById('BombAudio');
 const itemUpAudio = document.getElementById('ItemUpAudio');
-itemUpAudio.volume = 0.5;
 const itemDownAudio = document.getElementById('ItemDownAudio');
-itemDownAudio.volume = 0.5;
+pointAudio.volume = 0.5;
+bombAudio.volume = 0.5;
+itemUpAudio.volume = 0.4;
+itemDownAudio.volume = 0.4;
+
 const waveAudio = document.getElementById('WaveAudio');
 waveAudio.volume = 0.3;
 waveAudio.loop = true;
@@ -745,14 +753,15 @@ const swingAudio = document.getElementById('SwingAudio');
 swingAudio.volume = 0.1;
 swingAudio.loop = true;
 
-gui.add(waveAudio, 'volume').min(0).max(1).step(0.01);
-gui.add(swingAudio, 'volume').min(0).max(1).step(0.01);
+let allAudioArr = [levelChangeAudio, crashAudio, pointAudio, bombAudio, itemDownAudio, itemUpAudio, waveAudio, swingAudio];
 
-gui.add(levelChangeAudio, 'volume').min(0).max(1).step(0.01);
-gui.add(crashAudio, 'volume').min(0).max(1).step(0.01);
+// gui.add(waveAudio, 'volume').min(0).max(1).step(0.01);
+// gui.add(swingAudio, 'volume').min(0).max(1).step(0.01);
+
+// gui.add(levelChangeAudio, 'volume').min(0).max(1).step(0.01);
+// gui.add(crashAudio, 'volume').min(0).max(1).step(0.01);
 
 let module1Group;
-let module1Interval;
 let module2Group;
 let module2Interval;
 let module3Group;
@@ -1300,17 +1309,20 @@ let renewControls = () => {
 }
 let cameraPos = { x: 0, y: 26, z: 100 }
 let switchOrthographicView = () => {
-  waveAudio.play();
-  waveAudio.volume = 0.3;
-  swingAudio.play();
-  swingAudio.volume = 0;
-  gsap.to(
-    swingAudio,
-    {
-      volume: 0.12,
-      duration: 3.5
-    }
-  )
+  if(VOLUME_MODE == 'On'){
+    gsap.killTweensOf(swingAudio);
+    waveAudio.play();
+    waveAudio.volume = 0.7;
+    swingAudio.play();
+    swingAudio.volume = 0;
+    gsap.to(
+      swingAudio,
+      {
+        volume: 0.3,
+        duration: 3.5
+      }
+    )
+  }
   cameraData.type = 'Orthographic'
   camera = orthographicCamera;
   camera.position.set(0, 26, 100);
@@ -1347,6 +1359,7 @@ let switchOrthographicView = () => {
   document.querySelector('div.module-btn').classList.remove('hide');
   document.querySelector('div.module-desc-container').classList.remove('hide');
   document.querySelector('div.close-btn').classList.remove('hide');
+  document.querySelector('div.sound-toggle-btn').classList.remove('hide');
   document.querySelector('div.enter-interaction').classList.add('hide');
   document.querySelector('div.theme-toggle-btn').classList.add('left-align');
 
@@ -1470,6 +1483,7 @@ let switchPerspectiveView = () => {
   document.querySelector('div.module-desc-container').classList.add('hide');
   document.querySelector('div.close-btn').classList.add('hide');
   document.querySelector('div.enter-interaction').classList.remove('hide');
+  document.querySelector('div.sound-toggle-btn').classList.add('hide');
   document.querySelector('div.theme-toggle-btn').classList.remove('left-align');
   document.querySelector('div.pointer').classList.add('hide');
 
@@ -1488,6 +1502,46 @@ let changeViewEventListener = () => {
 
 document.querySelector('.change-view').addEventListener('click', changeViewEventListener);
 document.querySelector('div.close-btn').addEventListener('click', changeViewEventListener);
+
+let VOLUME_MODE = 'On';
+document.querySelector('div.sound-toggle-btn').addEventListener('click', () => {
+  if (VOLUME_MODE === 'On') {
+    document.querySelector('div.sound-toggle-btn>svg.sound-on').classList.add('hide');
+    document.querySelector('div.sound-toggle-btn>svg.sound-off').classList.remove('hide');
+    VOLUME_MODE = 'Off'
+
+    allAudioArr.forEach((audio) => {
+      // audio.currentTime = 0;
+      audio.pause();
+      console.log(audio.volume)
+      audio.volume = 0;
+    })
+  }
+  else {
+    document.querySelector('div.sound-toggle-btn>svg.sound-on').classList.remove('hide');
+    document.querySelector('div.sound-toggle-btn>svg.sound-off').classList.add('hide');
+    VOLUME_MODE = 'On'
+    levelChangeAudio.volume = 1;
+    crashAudio.volume = 0.5;
+    pointAudio.volume = 0.5;
+    bombAudio.volume = 0.5;
+    itemUpAudio.volume = 0.4;
+    itemDownAudio.volume = 0.4;
+
+    gsap.killTweensOf(swingAudio);
+    waveAudio.play();
+    waveAudio.volume = 0.7;
+    swingAudio.play();
+    swingAudio.volume = 0;
+    gsap.to(
+      swingAudio,
+      {
+        volume: 0.3,
+        duration: 3.5
+      }
+    )
+  }
+})
 
 let CURRENT_MODE = 'Day';
 let MODE_CHANGING = false;
@@ -1549,6 +1603,9 @@ let changeMode = () => {
 
     document.querySelector('div.close-btn').style.backgroundColor = '#0A365D';
     document.querySelector('div.close-btn>svg').style.fill = '#ebebeb';
+    document.querySelector('div.sound-toggle-btn').style.backgroundColor = '#0A365D';
+    document.querySelector('div.sound-toggle-btn>svg.sound-on').style.fill = '#ebebeb';
+    document.querySelector('div.sound-toggle-btn>svg.sound-off').style.fill = '#ebebeb';
     // bgGradient = `linear-gradient(rgba(2, 4, 42, 1) 0%, rgba(9, 70, 121, 1) 20%, rgb(225 141 75) 46%)`;
   }
   else {
@@ -1571,6 +1628,9 @@ let changeMode = () => {
 
     document.querySelector('div.close-btn').style.backgroundColor = '#fff';
     document.querySelector('div.close-btn>svg').style.fill = '#0A365D';
+    document.querySelector('div.sound-toggle-btn').style.backgroundColor = '#fff';
+    document.querySelector('div.sound-toggle-btn>svg,sound-on').style.fill = '#0A365D';
+    document.querySelector('div.sound-toggle-btn>svg,sound-off').style.fill = '#0A365D';
   }
   gsap.to(planeMaterial.uniforms.uTopColor.value, { r: topColor.r, g: topColor.g, b: topColor.b, duration: 2 })
   gsap.to(planeMaterial.uniforms.uBottomColor.value, { r: bottomColor.r, g: bottomColor.g, b: bottomColor.b, duration: 2 })
