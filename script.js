@@ -1,15 +1,22 @@
 // 
 // IMPORTS =============================================================================
 // 
-import * as THREE from 'three'
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import * as THREE from './lib/three.module.js'
+import { OrbitControls } from './lib/addons/OrbitControls.js';
+import { GLTFLoader } from './lib/addons/GLTFLoader.js';
+import { DRACOLoader } from './lib/addons/DRACOLoader.js';
+import { FontLoader } from './lib/addons/FontLoader.js';
+import { TextGeometry } from './lib/addons/TextGeometry.js';
+import { MeshSurfaceSampler } from './lib/addons/MeshSurfaceSampler.js';
 
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
-import { MeshSurfaceSampler } from 'three/addons/math/MeshSurfaceSampler.js';
+// import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+// import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-import { FontLoader } from 'three/addons/loaders/FontLoader.js';
-import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+// import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+// import { MeshSurfaceSampler } from 'three/addons/math/MeshSurfaceSampler.js';
+
+// import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+// import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
 // import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
@@ -22,7 +29,7 @@ import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 // import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 // import { SMAAPass } from 'three/addons/postprocessing/SMAAPass.js'
 
-import GUI from 'https://cdn.jsdelivr.net/npm/lil-gui@0.19.0/+esm';
+import GUI from './lib/lil-gui.js';
 
 import planeVertexShader from "./shaders/plane/vertex.js";
 import planeFragmentShader from "./shaders/plane/fragment.js";
@@ -50,6 +57,7 @@ loadingManager.onLoad = function () {
 
   // console.log('End time : ', Date.now());
   console.log('Total time : ' + (Date.now() - startTime) + ' ms');
+  console.log('Made by: @pantchayan');
   // console.log('Loading complete!');
   progressText.innerText = 'Constructing Experience...';
   setTimeout(() => {
@@ -782,12 +790,35 @@ let btnIntersectionFlag; // RELATED TO MODULE 5 - Car btns
 
 const mouse = new THREE.Vector2()
 
-window.addEventListener('mousemove', (event) => {
+// window.addEventListener('mousemove', (event) => {
+// })
+
+
+// Throttling function
+function throttleForMouse(func, limit) {
+  let inThrottle;
+  return function () {
+    const args = arguments;
+    const context = this;
+    if (!inThrottle) {
+      // console.log('Lowering')
+      func.apply(context, args);
+      inThrottle = true;
+      setTimeout(() => { inThrottle = false; }, limit);
+    }
+  }
+}
+
+// Throttle the mousemove event
+const throttledMouseMove = throttleForMouse((event) => {
   var canvasBounds = renderer.domElement.getBoundingClientRect();
 
   mouse.x = ((event.clientX - canvasBounds.left) / (canvasBounds.width)) * 2 - 1;
   mouse.y = - ((event.clientY - canvasBounds.top) / (canvasBounds.height)) * 2 + 1;
-})
+  // updateRaycasting();
+}, 100);
+
+window.addEventListener('mousemove', throttledMouseMove);
 
 
 // 
@@ -1067,7 +1098,7 @@ let animate = () => {
 
   if (module8Group || objectsToUpdate.length > 0) {
     if (!module8Group) {
-      console.log('Deleting Spheres', elapsedTime)
+      // console.log('Deleting Spheres', elapsedTime)
       _GlobalSphereBodyArr.forEach((sphere) => {
         world.removeBody(sphere)
       })
@@ -1309,7 +1340,7 @@ let renewControls = () => {
 }
 let cameraPos = { x: 0, y: 26, z: 100 }
 let switchOrthographicView = () => {
-  if(VOLUME_MODE == 'On'){
+  if (VOLUME_MODE == 'On') {
     gsap.killTweensOf(swingAudio);
     waveAudio.play();
     waveAudio.volume = 0.7;
@@ -1513,7 +1544,7 @@ document.querySelector('div.sound-toggle-btn').addEventListener('click', () => {
     allAudioArr.forEach((audio) => {
       // audio.currentTime = 0;
       audio.pause();
-      console.log(audio.volume)
+      // console.log(audio.volume)
       audio.volume = 0;
     })
   }
@@ -1629,8 +1660,8 @@ let changeMode = () => {
     document.querySelector('div.close-btn').style.backgroundColor = '#fff';
     document.querySelector('div.close-btn>svg').style.fill = '#0A365D';
     document.querySelector('div.sound-toggle-btn').style.backgroundColor = '#fff';
-    document.querySelector('div.sound-toggle-btn>svg,sound-on').style.fill = '#0A365D';
-    document.querySelector('div.sound-toggle-btn>svg,sound-off').style.fill = '#0A365D';
+    document.querySelector('div.sound-toggle-btn>svg.sound-on').style.fill = '#0A365D';
+    document.querySelector('div.sound-toggle-btn>svg.sound-off').style.fill = '#0A365D';
   }
   gsap.to(planeMaterial.uniforms.uTopColor.value, { r: topColor.r, g: topColor.g, b: topColor.b, duration: 2 })
   gsap.to(planeMaterial.uniforms.uBottomColor.value, { r: bottomColor.r, g: bottomColor.g, b: bottomColor.b, duration: 2 })
@@ -2567,7 +2598,7 @@ let module8Animation = (stage) => {
   else if (stage === "destroy") {
     // console.log('CLEAR EVERYTHING')
     canvas.removeEventListener('click', ballsBtnClickListener, true);
-    console.log(world);
+    // console.log(world);
     world = new CANNON.World();
     cannonDebugRenderer = new CannonDebugRenderer(scene, world);
     world.gravity.set(0, -9.82, 0);
@@ -2804,7 +2835,7 @@ let module9Animation = (stage) => {
       // console.log('IN GAME');
       if (currItemHover) {
         const index = trackerArr.indexOf(currItemHover);
-        console.log(index, currItemHover.name)
+        // console.log(index, currItemHover.name)
         module9Group.remove(currItemHover);
         module9Group.remove(itemsArr[index]);
         if (currItemHover.name.includes('bomb')) {

@@ -239,56 +239,20 @@
 
 
 
-    <!-- Three.js v0.161.0 (r161) -->
-    <script type="importmap">
-        {
-          "imports": {
-            "three": "https://unpkg.com/three@0.166.0/build/three.module.js",
-            "three/addons/": "https://unpkg.com/three@0.166.0/examples/jsm/"
-          }
-        }
-    </script>
+    <!-- Three.js v0.166.0 (r166) -->
+    <script type="module" src="./lib/three.module.js"></script>
+    <script type="module" src="./lib/addons/DRACOLoader.js"></script>
+    <script type="module" src="./lib/addons/GLTFLoader.js"></script>
+    <script type="module" src="./lib/addons/OrbitControls.js"></script>
+    <script type="module" src="./lib/addons/FontLoader.js"></script>
+    <script type="module" src="./lib/addons/TextGeometry.js"></script>
+    <script type="module" src="./lib/lil-gui.js"></script>
+
     <!-- GSAP -->
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-    <!-- Cannon.js -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.js"
-        integrity="sha512-+E0UhA8ib3H5AlREMX1I0mc3R7HMkQYH+hkkfW47aLGMnVJwod+jJ2jxe94xYyUdqPs9AFDHUxKnJzScEP5cmA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
-    <script src="cannon.js"></script>
+     <script src="./lib/gsap.min.js"></script>
+     <!-- Cannon.js -->
+    <script src="./lib/cannon.js"></script>
     <script src="script.js" type="module"></script>
-    <script>
-        // let svgArr = document.querySelectorAll('.svg');
-        // let delayTime = 500; // Initial delay
-        // let z = 0;
-        // svgArr.forEach((svg, index) => {
-        //     // Set initial position to just below the screen (assuming y = 500px is off-screen)
-        //     gsap.set(svg, { y: 500 + delayTime, height: "70%" });
-        //     svg.style.zIndex = z++;
-        //     console.log(svg.style.zIndex)
-        //     svg.style.display = 'none'
-        //     delayTime += 450
-        //     // delayTime += 0.015; // Adjust the delay for each successive SVG
-        // });
-
-        // document.querySelector('.change-view').addEventListener('click', () => {
-        //     delayTime = 300;
-        //     // gsap.set(svg, { y: 500 + delayTime, height: "70%" });
-        //     svgArr.forEach((svg, index) => {
-        //         svg.style.display = 'block'
-        //         // Set initial position to just below the screen (assuming y = 500px is off-screen)
-
-        //         // delayTime += 0.015; // Adjust the delay for each successive SVG
-        //         // Animate the SVG up to -1000px off the screen with staggered timing
-        //         gsap.to(svg, {
-        //             y: "-100vh",
-        //             duration: 1.8,
-        //             ease: 'power2.out',
-        //             onComplete: () => {svg.style.display = 'none'} // Smooth in and out ease for swipe effect
-        //         });
-    
-        //     });
-        // })
-    </script>
     <!-- <script>javascript: (function () { var script = document.createElement('script'); script.onload = function () { var stats = new Stats(); document.body.appendChild(stats.dom); requestAnimationFrame(function loop() { stats.update(); requestAnimationFrame(loop) }); }; script.src = 'https://mrdoob.github.io/stats.js/build/stats.min.js'; document.head.appendChild(script); })()</script> -->
 </body>
 
