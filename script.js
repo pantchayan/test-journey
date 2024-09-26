@@ -465,7 +465,7 @@ planeMesh.position.y = 2;
 let bgPlaneMaterial = new THREE.MeshStandardMaterial()
 bgPlaneMaterial.transparent = true;
 bgPlaneMaterial.alphaMap = skyImg;
-let bgPlane = new THREE.Mesh(new THREE.PlaneGeometry(150, 3, 1, 1), bgPlaneMaterial);
+let bgPlane = new THREE.Mesh(new THREE.PlaneGeometry(180, 3, 1, 1), bgPlaneMaterial);
 bgPlane.position.y = 2;
 bgPlane.position.z = -30;
 scene.add(bgPlane);
@@ -511,7 +511,7 @@ const orthographicCamera = new THREE.OrthographicCamera(
 orthographicCamera.position.set(-8, 20, 200);
 // camera = orthographicCamera; // Uncomment to make orthographic by default
 
-camera.lookAt(new THREE.Vector3(-8, 8, 0));
+camera.lookAt(new THREE.Vector3(-12, 8, 0));
 
 
 let cameraFolder = gui.addFolder('Camera');
@@ -1338,6 +1338,25 @@ let renewControls = () => {
   controls.maxZoom = 3;
   controls.minZoom = 1;
 }
+
+function openFullScreen() {
+  document.body.requestFullscreen();
+}
+
+function closeFullScreen() {
+  // exitFullscreen is only available on the Document object.
+  if (document.fullscreenElement)
+    document.exitFullscreen();
+}
+
+// Add an event listener for fullscreen changes
+document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement) {
+    // User has exited full screen
+    switchPerspectiveView();
+  }
+});
+
 let cameraPos = { x: 0, y: 26, z: 100 }
 let switchOrthographicView = () => {
   if (VOLUME_MODE == 'On') {
@@ -1494,7 +1513,7 @@ let switchPerspectiveView = () => {
   camera = perspectiveCamera;
   camera.position.set(-8, 8, 25);
   controls = undefined;
-  camera.lookAt(new THREE.Vector3(-8, 8, 0));
+  camera.lookAt(new THREE.Vector3(-12, 8, 0));
 
   plugeeModel.position.x += 1.5;
   boatModel.position.x += 1.5;
@@ -1525,10 +1544,14 @@ let switchPerspectiveView = () => {
 
 
 let changeViewEventListener = () => {
-  if (camera.type === 'PerspectiveCamera')
+  if (camera.type === 'PerspectiveCamera') {
+    openFullScreen();
     switchOrthographicView();
-  else
+  }
+  else {
+    closeFullScreen();
     switchPerspectiveView();
+  }
 }
 
 document.querySelector('.change-view').addEventListener('click', changeViewEventListener);
