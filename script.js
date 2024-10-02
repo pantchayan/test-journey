@@ -98,7 +98,7 @@ loadingManager.onLoad = function () {
 
 
   gsap.to(progressContainer, {
-    opacity: 0, duration: 1.5,
+    opacity: 0, duration: 1,
     onComplete: () => {
       progressContainer.style.display = 'none'
       gsap.to(document.querySelector('div.enter-interaction'), { scale: 1.2, duration: 0.7 })
@@ -107,7 +107,7 @@ loadingManager.onLoad = function () {
 
 
   gsap.to(islandModel.position, {
-    y: yPos.islandY, duration: 2, onComplete: () => { scene.remove(landMesh) }
+    y: yPos.islandY, duration: 1.5, onComplete: () => { scene.remove(landMesh) }
   })
 
   setTimeout(() => {
