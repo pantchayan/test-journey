@@ -60,14 +60,59 @@ loadingManager.onLoad = function () {
   console.log('Made by: @pantchayan');
   // console.log('Loading complete!');
   progressText.innerText = 'Constructing Experience...';
-  setTimeout(() => {
-    progressContainer.style.display = 'none';
-  }, 50);
 
+
+  // showPlugee = false;
+  // showBoat = false;
+
+  let yPos = {
+    islandY: islandModel.position.y,
+    plugeeY: plugeeModel.position.y,
+    boatY: boatModel.position.y
+  }
+
+
+  let landMesh;
+  islandModel.traverse((obj) => {
+    if (obj.isMesh) {
+      if (obj.name == 'land') {
+        landMesh = obj.clone();
+        scene.add(landMesh)
+        landMesh.position.y = -0.45;
+        landMesh.rotation.y = -Math.PI / 3;
+        landMesh.scale.set(10, 10, 10);
+      }
+    }
+  })
+
+  islandModel.position.y -= 25;
+  // plugeeModel.position.y -= 25;
+  // boatModel.position.y -= 10;
+
+
+  directionalLight.position.x = 7.66;
+  directionalLight.position.y = 0.5;
+  directionalLight.position.z = -2;
+
+  document.querySelector('div.enter-interaction').style.scale = 0;
+
+
+  gsap.to(progressContainer, {
+    opacity: 0, duration: 1.5,
+    onComplete: () => {
+      progressContainer.style.display = 'none'
+      gsap.to(document.querySelector('div.enter-interaction'), { scale: 1.2, duration: 0.7 })
+    }
+  })
+
+
+  gsap.to(islandModel.position, {
+    y: yPos.islandY, duration: 2, onComplete: () => { scene.remove(landMesh) }
+  })
 
   setTimeout(() => {
     document.querySelector('.theme-toggle-btn').click()
-  }, 2500)
+  }, 6000)
 };
 
 loadingManager.onProgress = function (url, itemsLoaded, itemsTotal) {
@@ -152,6 +197,7 @@ gltfLoader.load('./assets/models/audio_vis_compressed.glb', (gltf) => {
   // module7Animation('build');
 })
 
+let showPlugee = true;
 let plugeeModel;
 gltfLoader.load('./assets/models/compressed-plugee.glb', (gltf) => {
   plugeeModel = gltf.scene;
@@ -1162,7 +1208,7 @@ let animate = () => {
   }
 
   // PLUGEE ANIMATION
-  if (plugeeModel) {
+  if (plugeeModel && showPlugee) {
     plugeeModel.position.y = 3 - 0.1 * Math.cos(elapsedTime * 1.25);
     plugeeModel.lookAt(camera.position)
   }

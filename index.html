@@ -46,10 +46,12 @@
 
 <body>
     <div class="progress-bar-container">
-        <label for="progress-bar" class="progress-bar">Started loading...</label>
-        <progress id="progress-bar" value="0"></progress>
-        <br>
-        <p> Interact and understand learner's journery. </p>
+        <div class="progress-children">
+            <label for="progress-bar" class="progress-bar">Started loading...</label>
+            <progress id="progress-bar" value="0"></progress>
+            <br>
+            <p> Interact and understand learner's journery. </p>
+        </div>
     </div>
     <canvas class="webgl"></canvas>
     <audio id="crashAudio" style="display:none">
@@ -88,7 +90,7 @@
                     fill=""></path>
             </svg>
         </div>
-        <div class="btn-content">Click here!</div>
+        <div class="btn-content"><span>Click here to</span>Explore!</div>
         <div class="arrow-right arrow-small">
             <svg width="11" height="7" viewBox="0 0 11 7" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" clip-rule="evenodd"

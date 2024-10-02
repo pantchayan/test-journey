@@ -25,6 +25,10 @@ div.module-btn {
   background-color: white;
 }
 
+div.enter-interaction span {
+  font-size: small;
+}
+
 div.enter-interaction>.arrow-small>svg {
   fill: #0084FF;
   opacity: 1;
@@ -37,6 +41,10 @@ div.module-btn>.arrow-large>svg {
 div.enter-interaction>div.btn-content {
   margin: 0 10px;
   font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 div.enter-interaction:hover {
@@ -146,7 +154,8 @@ div.module-desc-content:hover {
   cursor: default;
 }
 
-div.theme-toggle-btn, div.sound-toggle-btn {
+div.theme-toggle-btn,
+div.sound-toggle-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -160,7 +169,7 @@ div.theme-toggle-btn, div.sound-toggle-btn {
   background-color: white;
 }
 
-div.sound-toggle-btn{
+div.sound-toggle-btn {
   bottom: calc(100% - 140px);
 }
 
@@ -193,7 +202,7 @@ div.hide {
 }
 
 
-div.sound-toggle-btn:hover{
+div.sound-toggle-btn:hover {
   cursor: pointer;
 }
 
@@ -220,7 +229,7 @@ div.pointer {
 }
 
 
-div.pointer>svg{
+div.pointer>svg {
   scale: 5;
 }
 
@@ -254,7 +263,8 @@ div.pointer>svg{
     left: calc(50% - 100px);
     /* Further adjust width for mobile devices */
   }
-  div.pointer>svg{
+
+  div.pointer>svg {
     scale: 5;
   }
 }
