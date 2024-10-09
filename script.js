@@ -72,20 +72,22 @@ loadingManager.onLoad = function () {
   }
 
 
-  let landMesh;
-  islandModel.traverse((obj) => {
+  let landMesh2;
+  let islandModel2 = islandModel;
+  islandModel2.traverse((obj) => {
     if (obj.isMesh) {
       if (obj.name == 'land') {
-        landMesh = obj.clone();
-        scene.add(landMesh)
-        landMesh.position.y = -0.45;
-        landMesh.rotation.y = -Math.PI / 3;
-        landMesh.scale.set(10, 10, 10);
+        landMesh2 = obj.clone();
+        scene.add(landMesh2)
+        landMesh2.position.y = -0.45;
+        landMesh2.rotation.y = -Math.PI / 3;
+        landMesh2.scale.set(10, 10, 10);
       }
     }
   })
 
-  islandModel.position.y -= 25;
+  islandModel2.position.y -= 25;
+  scene.add(islandModel2);
   // plugeeModel.position.y -= 25;
   // boatModel.position.y -= 10;
 
@@ -106,8 +108,8 @@ loadingManager.onLoad = function () {
   })
 
 
-  gsap.to(islandModel.position, {
-    y: yPos.islandY, duration: 1.5, onComplete: () => { scene.remove(landMesh) }
+  gsap.to(islandModel2.position, {
+    y: yPos.islandY, duration: 1.5, onComplete: () => { scene.remove(landMesh2);  }
   })
 
   setTimeout(() => {
@@ -1399,7 +1401,7 @@ function closeFullScreen() {
 document.addEventListener('fullscreenchange', () => {
   if (!document.fullscreenElement) {
     // User has exited full screen
-    switchPerspectiveView();
+    // switchPerspectiveView();
   }
 });
 
