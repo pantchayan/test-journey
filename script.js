@@ -1722,7 +1722,7 @@ let changeMode = () => {
     sunColor = new THREE.Color('orange')
     targetSunColor = new THREE.Color('yellow');
     cloudColor = new THREE.Color('#f7f7f7');
-    bgGradient = `rgba(0, 212, 255, 1)`;
+    bgGradient = `rgb(39, 103, 153)`;
     currSunPos = [20, -5, -50];
     targetSunPos = [-60, 55, -50];
 
