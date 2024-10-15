@@ -112,9 +112,9 @@ loadingManager.onLoad = function () {
     y: yPos.islandY, duration: 1.5, onComplete: () => { scene.remove(landMesh2);  }
   })
 
-  setTimeout(() => {
-    document.querySelector('.theme-toggle-btn').click()
-  }, 6000)
+  // setTimeout(() => {
+  //   document.querySelector('.theme-toggle-btn').click()
+  // }, 6000)
 };
 
 loadingManager.onProgress = function (url, itemsLoaded, itemsTotal) {
