@@ -133,7 +133,7 @@ loadingManager.onError = function (url) {
 // 
 // INITIALIZING UTILITY CLASSES =======================================================
 // 
-const gui = new GUI();
+let gui = new GUI();
 const textureLoader = new THREE.TextureLoader(loadingManager);
 const gltfLoader = new GLTFLoader(loadingManager);
 const dracoLoader = new DRACOLoader(loadingManager);
@@ -359,9 +359,9 @@ const sizes = { width: window.innerWidth, height: window.innerHeight };
 // 
 const scene = new THREE.Scene();
 // scene.background = skyImg
-scene.background = sceneBgImg;
-gui.add(scene, 'backgroundBlurriness').min(0).max(5).step(0.01)
-gui.add(scene, 'backgroundIntensity').min(0).max(5).step(0.01)
+// scene.background = sceneBgImg;
+gui.add(scene, 'backgroundBlurriness').min(0).max(5).step(0.01);
+gui.add(scene, 'backgroundIntensity').min(0).max(5).step(0.01);
 
 
 // 
@@ -512,6 +512,7 @@ planeMesh.rotation.x = -Math.PI / 2;
 planeMesh.position.y = 2;
 let bgPlaneMaterial = new THREE.MeshStandardMaterial()
 bgPlaneMaterial.transparent = true;
+bgPlaneMaterial.opacity = 0.7;
 bgPlaneMaterial.alphaMap = skyImg;
 let bgPlane = new THREE.Mesh(new THREE.PlaneGeometry(180, 3, 1, 1), bgPlaneMaterial);
 bgPlane.position.y = 2;
@@ -1407,6 +1408,7 @@ document.addEventListener('fullscreenchange', () => {
 
 let cameraPos = { x: 0, y: 26, z: 100 }
 let switchOrthographicView = () => {
+  scene.background = new THREE.Color('rgb(39, 103, 153)');
   if (VOLUME_MODE == 'On') {
     gsap.killTweensOf(swingAudio);
     waveAudio.play();
@@ -1503,6 +1505,8 @@ let switchOrthographicView = () => {
 let animHappened = false;
 let delIslandTimeout;
 let switchPerspectiveView = () => {
+  
+  scene.background = null;
   gsap.to(
     swingAudio,
     {
@@ -3361,3 +3365,12 @@ window.addEventListener("keydown", (event) => {
     gui.show();
   }
 });
+
+let gui2 = new GUI()
+gui2.show()
+
+objDebug.bodyBackgroundColor = 'rgb(39, 103, 153)';
+
+gui2.addColor(objDebug, 'bodyBackgroundColor').onChange(() => {
+  document.querySelector('body').style.backgroundColor = objDebug.bodyBackgroundColor
+})
