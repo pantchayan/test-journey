@@ -109,7 +109,7 @@ loadingManager.onLoad = function () {
 
 
   gsap.to(islandModel2.position, {
-    y: yPos.islandY, duration: 1.5, onComplete: () => { scene.remove(landMesh2);  }
+    y: yPos.islandY, duration: 1.5, onComplete: () => { scene.remove(landMesh2); }
   })
 
   // setTimeout(() => {
@@ -562,6 +562,10 @@ orthographicCamera.position.set(-8, 20, 200);
 
 camera.lookAt(new THREE.Vector3(-12, 8, 0));
 
+if (sizes.width < 560) {
+  camera.position.x = 1;
+  document.querySelector('.enter-interaction').style.left = 'calc(50% - 77px)'
+}
 
 let cameraFolder = gui.addFolder('Camera');
 
@@ -1163,6 +1167,7 @@ let animate = () => {
     world.step(1 / 50);
   }
 
+
   // for (let i = 0; i < objectsToUpdate.length; i++) {
   //   objectsToUpdate[i].mesh.position.copy(objectsToUpdate[i].body.position);
   //   objectsToUpdate[i].mesh.quaternion.copy(objectsToUpdate[i].body.quaternion);
@@ -1505,7 +1510,7 @@ let switchOrthographicView = () => {
 let animHappened = false;
 let delIslandTimeout;
 let switchPerspectiveView = () => {
-  
+
   scene.background = null;
   gsap.to(
     swingAudio,
@@ -1566,6 +1571,11 @@ let switchPerspectiveView = () => {
   camera.position.set(-8, 8, 25);
   controls = undefined;
   camera.lookAt(new THREE.Vector3(-12, 8, 0));
+
+  if (sizes.width < 560) {
+    camera.position.x = 1;
+    document.querySelector('.enter-interaction').style.left = 'calc(50% - 77px)'
+  }
 
   plugeeModel.position.x += 1.5;
   boatModel.position.x += 1.5;
@@ -1722,7 +1732,7 @@ let changeMode = () => {
     sunColor = new THREE.Color('orange')
     targetSunColor = new THREE.Color('yellow');
     cloudColor = new THREE.Color('#f7f7f7');
-    bgGradient = `rgb(39, 103, 153)`;
+    bgGradient = `#3880b7`;
     currSunPos = [20, -5, -50];
     targetSunPos = [-60, 55, -50];
 
@@ -3366,11 +3376,13 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
-let gui2 = new GUI()
-gui2.show()
 
-objDebug.bodyBackgroundColor = 'rgb(39, 103, 153)';
 
-gui2.addColor(objDebug, 'bodyBackgroundColor').onChange(() => {
-  document.querySelector('body').style.backgroundColor = objDebug.bodyBackgroundColor
-})
+// let gui2 = new GUI()
+// gui2.show()
+
+// objDebug.bodyBackgroundColor = 'rgb(39, 103, 153)';
+
+// gui2.addColor(objDebug, 'bodyBackgroundColor').onChange(() => {
+//   document.querySelector('body').style.backgroundColor = objDebug.bodyBackgroundColor
+// })
